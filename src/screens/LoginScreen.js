@@ -24,6 +24,7 @@ const LoginScreen = ({navigation}) => {
   const [userError, setUserError] = useState(false);
   const [passError, setPassError] = useState(false);
   const {height: windowHeight} = useWindowDimensions();
+  const {isLogedIn, login} = useContext(UserContext);
   const onPressSignIn = async () => {
     // Checking for empty input setting Error flags accordingly for rendering borders of TextInput el
     if (username.trim().length < 1) {
@@ -42,11 +43,12 @@ const LoginScreen = ({navigation}) => {
     // setting the current logged in user in storage
     try {
       await AsyncStorage.setItem('loggedUser', username);
-      navigation.replace('Home')
+      login();
+      //navigation.replace('Home');
     } catch (error) {
       console.log({error});
     }
-    console.warn('Press signIn from LoginScreen');
+
     // signIn();
   };
   const onPressSignUp = () => {
@@ -62,12 +64,12 @@ const LoginScreen = ({navigation}) => {
           resizeMode="contain"
         />
         <CustomInput
-          placeholder={'Username'}
+          placeholder="Username"
           value={username}
           setValue={setUsername}
           errorState={userError}></CustomInput>
         <CustomInput
-          placeholder={'Password'}
+          placeholder="Password"
           value={password}
           setValue={setPassword}
           secureTextEntry
